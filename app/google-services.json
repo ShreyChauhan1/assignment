@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "408939110132",
+    "firebase_url": "https://assignment-test-1a634.firebaseio.com",
+    "project_id": "assignment-test-1a634",
+    "storage_bucket": "assignment-test-1a634.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:408939110132:android:a915e809578228c59e48a1",
+        "android_client_info": {
+          "package_name": "sg.edu.np.mad.assignmenttest"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "408939110132-pdnj80k7957jgu21aum86ta8604i8lvv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBSXLhL8rQXaR7EjQ4C4fWdLW13nZHrMA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "408939110132-pdnj80k7957jgu21aum86ta8604i8lvv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
