@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SearchView;
@@ -18,12 +19,13 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
     Context context;
     ArrayList<String> med_name_list;
     ArrayList<String>med_id_list;
-
+    EditText searchbar;
 
 
     class SearchViewHolder extends RecyclerView.ViewHolder{
         TextView med_name;
         TextView med_id;
+
         public SearchViewHolder(View v)
         {
 
@@ -54,6 +56,17 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
     public void onBindViewHolder(@NonNull SearchViewHolder holder, int position) {
         holder.med_name.setText(med_name_list.get(position));
         holder.med_id.setText(med_id_list.get(position));
+        final String med_name_2 = holder.med_name.getText().toString();
+        //click on row of data and it will update the edit text for medicine
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LayoutInflater inflater = LayoutInflater.from(v.getContext());
+                View view = inflater.inflate(R.layout.add_med, null, false);
+                searchbar = view.findViewById(R.id.search_med);
+                searchbar.setText(med_name_2);
+            }
+        });
     }
 
 

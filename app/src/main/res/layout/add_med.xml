@@ -10,9 +10,7 @@
         android:id="@+id/search_med"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="9dp"
-        android:layout_marginTop="100dp"
-        android:layout_marginEnd="9dp"
+        android:layout_marginTop="32dp"
         android:background="@drawable/search_bar"
         android:hint="Search Medicine..."
         android:padding="20dp"
@@ -25,24 +23,26 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="9dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="9dp"
-        app:layout_constraintBottom_toTopOf="@+id/time"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/editText_time"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/search_med" />
 
     <EditText
-        android:id="@+id/time"
+        android:id="@+id/editText_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="9dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="108dp"
         android:background="@drawable/search_bar"
         android:ems="10"
+        android:focusableInTouchMode="false"
         android:hint="Time"
         android:inputType="time"
         android:padding="20dp"
-
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/search_med" />
 
@@ -50,26 +50,26 @@
         android:id="@+id/editText4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="9dp"
         android:layout_marginTop="30dp"
-        android:ems="10"
         android:background="@drawable/search_bar"
+        android:ems="10"
         android:hint="Amount"
-        android:padding="20dp"
-
         android:inputType="number"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/time" />
+
+        android:padding="20dp"
+        app:layout_constraintEnd_toEndOf="@+id/editText_time"
+        app:layout_constraintStart_toStartOf="@+id/editText_time"
+        app:layout_constraintTop_toBottomOf="@+id/editText_time" />
 
     <RadioGroup
         android:id="@+id/radioGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="9dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText4"
-        app:layout_constraintVertical_bias="0.196">
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="64dp"
+        app:layout_constraintEnd_toEndOf="@+id/editText4"
+        app:layout_constraintStart_toStartOf="@+id/editText4"
+        app:layout_constraintTop_toBottomOf="@+id/editText4">
 
         <RadioButton
             android:id="@+id/radioButton2"
@@ -89,13 +89,13 @@
     </RadioGroup>
 
     <ImageButton
-        android:id="@+id/imageButton2"
+        android:id="@+id/btn_submit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="64dp"
         android:background="@drawable/circle"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/editText4"
+        app:layout_constraintStart_toStartOf="@+id/editText4"
         app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
