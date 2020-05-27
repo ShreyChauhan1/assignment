@@ -44,6 +44,13 @@ public class AddMedicinePage extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager((new LinearLayoutManager(this)));
         recyclerView.addItemDecoration((new DividerItemDecoration(this, LinearLayoutManager.VERTICAL)));
+
+        med_list = new ArrayList<>();
+        id_list = new ArrayList<>();
+
+
+
+
         searchMed.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -57,6 +64,7 @@ public class AddMedicinePage extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
+                Log.d("Test","1");
                 if (!s.toString().isEmpty()) {
                     setAdapter(s.toString());
                 }
