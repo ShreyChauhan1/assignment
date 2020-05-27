@@ -32,7 +32,7 @@ public class AddMedicinePage extends AppCompatActivity {
 
     SearchAdapter searchAdapter;
     RecyclerView recyclerView;
-
+//
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
