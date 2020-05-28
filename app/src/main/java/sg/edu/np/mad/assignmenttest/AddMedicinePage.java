@@ -1,6 +1,8 @@
 package sg.edu.np.mad.assignmenttest;
 
+import android.app.Activity;
 import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
@@ -8,6 +10,9 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.SearchView;
@@ -32,7 +37,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class AddMedicinePage extends AppCompatActivity {
-    EditText searchMed,editTime;
+
+    public static EditText searchMed,editTime;
     ImageButton submit;
 
     DatabaseReference databaseReference;
@@ -40,12 +46,26 @@ public class AddMedicinePage extends AppCompatActivity {
     ArrayList<String> id_list;
 
     SearchAdapter searchAdapter;
-    RecyclerView recyclerView;
+    public static RecyclerView recyclerView;
 //git
+public static void hideKeyboard(Activity activity) {
+    InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+    //Find the currently focused view, so we can grab the correct window token from it.
+    View view = activity.getCurrentFocus();
+    //If no view currently has focus, create a new one, just so we can grab a window token from it
+    if (view == null) {
+        view = new View(activity);
+    }
+    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+}
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_med);
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+        ImageButton complete=findViewById(R.id.btn_submit);
+        complete.setEnabled(false);
         recyclerView = findViewById(R.id.recyclerView);
 
         searchMed = findViewById(R.id.search_med);

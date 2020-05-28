@@ -1,9 +1,11 @@
 package sg.edu.np.mad.assignmenttest;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -11,6 +13,7 @@ import android.widget.SearchView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -19,7 +22,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
     Context context;
     ArrayList<String> med_name_list;
     ArrayList<String>med_id_list;
-    EditText searchbar;
 
 
     class SearchViewHolder extends RecyclerView.ViewHolder{
@@ -61,10 +63,12 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LayoutInflater inflater = LayoutInflater.from(v.getContext());
-                View view = inflater.inflate(R.layout.add_med, null, false);
-                searchbar = view.findViewById(R.id.search_med);
-                searchbar.setText(med_name_2);
+                AddMedicinePage.searchMed.setText(med_name_2);
+                med_id_list.clear();
+                med_name_list.clear();
+                notifyDataSetChanged();
+
+                //complete.setEnabled(true);
             }
         });
     }
