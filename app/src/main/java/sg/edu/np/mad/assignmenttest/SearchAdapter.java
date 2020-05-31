@@ -64,8 +64,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
             @Override
             public void onClick(View v) {
                 AddMedicinePage.searchMed.setText(med_name_2);
-                med_id_list.clear();
-                med_name_list.clear();
+
                 notifyDataSetChanged();
 
                 //complete.setEnabled(true);

@@ -9,13 +9,16 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -39,7 +42,8 @@ import java.util.Date;
 public class AddMedicinePage extends AppCompatActivity {
 
     public static EditText searchMed,editTime;
-    ImageButton submit;
+    String medName;
+    public static ImageButton submit;
 
     DatabaseReference databaseReference;
     ArrayList<String> med_list;
@@ -48,19 +52,13 @@ public class AddMedicinePage extends AppCompatActivity {
     SearchAdapter searchAdapter;
     public static RecyclerView recyclerView;
 //git
-public static void hideKeyboard(Activity activity) {
 
-}
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_med);
-        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-        ImageButton complete=findViewById(R.id.btn_submit);
-        complete.setEnabled(false);
         recyclerView = findViewById(R.id.recyclerView);
-
         searchMed = findViewById(R.id.search_med);
         databaseReference = FirebaseDatabase.getInstance().getReference();
         recyclerView.setHasFixedSize(true);
@@ -73,7 +71,16 @@ public static void hideKeyboard(Activity activity) {
         editTime = findViewById(R.id.editText_time);
         submit = findViewById(R.id.btn_submit);
 
-
+        searchMed.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    // code to execute when EditText loses focus
+                    med_list.clear();
+                    id_list.clear();
+                }
+            }
+        });
         searchMed.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -89,7 +96,11 @@ public static void hideKeyboard(Activity activity) {
             public void afterTextChanged(Editable s) {
                 Log.d("Test","1");
                 if (!s.toString().isEmpty()) {
+                    medName=searchMed.getText().toString();
+
                     setAdapter(s.toString());
+                    checkValid();
+
                 }
                 else{
                     med_list.clear();
@@ -100,6 +111,7 @@ public static void hideKeyboard(Activity activity) {
         });
 
     }
+
 
     @Override
     protected void onStart() {
@@ -178,5 +190,28 @@ public static void hideKeyboard(Activity activity) {
                 Toast.makeText(AddMedicinePage.this,databaseError.getMessage(),Toast.LENGTH_SHORT).show();
             }
         });
+    }
+    public void checkValid(){
+        databaseReference.child("Medicine").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot: dataSnapshot.getChildren()){
+                    String med_name=snapshot.child("Name").getValue().toString();
+                    if(med_name.toLowerCase().contains(medName.toLowerCase())){
+                        submit.setEnabled(true);
+                    }
+                    else{
+                        submit.setEnabled(false);
+
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
 }

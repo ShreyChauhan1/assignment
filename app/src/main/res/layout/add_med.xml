@@ -16,9 +16,11 @@
         android:padding="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:inputType="text"
         app:layout_constraintTop_toTopOf="parent"
-        android:imeOptions="actionDone"
-        android:singleLine="true"/>
+        android:imeOptions="actionNext"
+        android:singleLine="true"
+        android:nextFocusForward="@+id/editText_time" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
@@ -46,7 +48,8 @@
         android:padding="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_med" />
+        app:layout_constraintTop_toBottomOf="@+id/search_med"
+        android:nextFocusForward="@+id/editText4" />
 
     <EditText
         android:id="@+id/editText4"
@@ -94,9 +97,10 @@
         android:id="@+id/btn_submit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="40dp"
         android:background="@drawable/circle"
         app:layout_constraintEnd_toEndOf="@+id/editText4"
+        app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="@+id/editText4"
         app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
 
