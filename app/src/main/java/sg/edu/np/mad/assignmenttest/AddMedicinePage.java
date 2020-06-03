@@ -49,9 +49,10 @@ public class AddMedicinePage extends AppCompatActivity {
     public static EditText searchMed;
     TextView dose;
     String medName;
-    ImageButton plus,minus;
-    Integer doseNumber;
-    public static ImageButton submit;
+    ImageButton plus,minus,breakfast,lunch,dinner;
+
+    Integer doseNumber,breakfastValid,lunchValid,dinnerValid;
+
 
     DatabaseReference databaseReference;
     ArrayList<String> med_list;
@@ -106,6 +107,8 @@ public class AddMedicinePage extends AppCompatActivity {
             }
         });
         String doseString=doseNumber.toString();
+        dose.setText(doseString);
+
         searchMed.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -119,7 +122,6 @@ public class AddMedicinePage extends AppCompatActivity {
                 return false;
             }
         });
-        dose.setText(doseString);
 
         searchMed.addTextChangedListener(new TextWatcher() {
             @Override
