@@ -2,11 +2,13 @@ package sg.edu.np.mad.assignmenttest;
 
 import android.app.Activity;
 import android.app.SearchManager;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -14,11 +16,15 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RadioGroup;
 import android.widget.SearchView;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -35,29 +41,37 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
 public class AddMedicinePage extends AppCompatActivity {
 
-    public static EditText searchMed,editTime;
+    public static EditText searchMed;
+    TextView dose;
     String medName;
+    ImageButton plus,minus;
+    Integer doseNumber;
     public static ImageButton submit;
 
     DatabaseReference databaseReference;
     ArrayList<String> med_list;
     ArrayList<String> id_list;
-
     SearchAdapter searchAdapter;
+    RadioGroup radioGroup;
     public static RecyclerView recyclerView;
+    TimePickerDialog picker;
+
 //git
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_med);
-
+        radioGroup=findViewById(R.id.radioGroup);
+        dose=findViewById(R.id.dose);
+        plus=findViewById(R.id.plus);
+        minus=findViewById(R.id.minus);
+        doseNumber=0;
         recyclerView = findViewById(R.id.recyclerView);
         searchMed = findViewById(R.id.search_med);
         databaseReference = FirebaseDatabase.getInstance().getReference();
@@ -67,20 +81,46 @@ public class AddMedicinePage extends AppCompatActivity {
 
         med_list = new ArrayList<>();
         id_list = new ArrayList<>();
+        Spinner spinner=findViewById(R.id.spinner1);
+        // Create an ArrayAdapter using the string array and a default spinner layout
 
-        editTime = findViewById(R.id.editText_time);
-        submit = findViewById(R.id.btn_submit);
-
-        searchMed.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        ArrayAdapter<CharSequence> adapter=ArrayAdapter.createFromResource(this,R.array.medType,android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+// Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
+        plus.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    // code to execute when EditText loses focus
-                    med_list.clear();
-                    id_list.clear();
+            public void onClick(View v) {
+                doseNumber++;
+                Log.v("dose number:",doseNumber.toString());
+            }
+        });
+        minus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (doseNumber!=0){
+                doseNumber--;
+                Log.v("dose number:",doseNumber.toString());
                 }
             }
         });
+        String doseString=doseNumber.toString();
+        searchMed.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(actionId==EditorInfo.IME_ACTION_DONE){
+                    //Clear focus here from edittext
+
+                    searchMed.clearFocus();
+
+
+                }
+                return false;
+            }
+        });
+        dose.setText(doseString);
+
         searchMed.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -97,16 +137,16 @@ public class AddMedicinePage extends AppCompatActivity {
                 Log.d("Test","1");
                 if (!s.toString().isEmpty()) {
                     medName=searchMed.getText().toString();
-
-                    setAdapter(s.toString());
-                    checkValid();
+                    if(searchMed.hasFocus()){
+                    setAdapter(s.toString());}
+                    else{
+                        med_list.clear();
+                        id_list.clear();
+                        searchAdapter.notifyDataSetChanged();
+                    }
 
                 }
-                else{
-                    med_list.clear();
-                    id_list.clear();
-                    recyclerView.removeAllViews();
-                }
+
             }
         });
 
@@ -117,39 +157,16 @@ public class AddMedicinePage extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        editTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Date c = Calendar.getInstance().getTime();
-                new SingleDateAndTimePickerDialog.Builder(AddMedicinePage.this)
-                        .defaultDate(c)
-                        .minDateRange(c)
-                        .minutesStep(15)
-                        .displayListener(new SingleDateAndTimePickerDialog.DisplayListener() {
-                            @Override
-                            public void onDisplayed(SingleDateAndTimePicker picker) {
 
-                            }
-                        })
-                        .title("Allocate Medicine Timing")
-                        .listener(new SingleDateAndTimePickerDialog.Listener() {
-                            @Override
-                            public void onDateSelected(Date date) {
-                                Date selectedDate = date;
-                                editTime.setText(selectedDate.toString());
-                                //Toast.makeText(AddMedicinePage.this, selectedDate.toString(),Toast.LENGTH_SHORT).show();
-                            }
-                        }).display();
-            }
-        });
         //continue from here
-        submit.setOnClickListener(new View.OnClickListener() {
+        /*submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Check if all tasks has been selected.
                 //
+                checkValid();
             }
-        });
+        });*/
 
     }
 
@@ -164,7 +181,7 @@ public class AddMedicinePage extends AppCompatActivity {
                 int counter = 0;
 
                 for (DataSnapshot snapshot: dataSnapshot.getChildren()){
-                    String med_num=snapshot.getKey();
+                    //String med_num=snapshot.getKey();
                     String med_name=snapshot.child("Name").getValue().toString();
                     String id_num=snapshot.child("ID").getValue().toString();
                     if(med_name.toLowerCase().contains(searchedString.toLowerCase())){
@@ -177,7 +194,7 @@ public class AddMedicinePage extends AppCompatActivity {
                         id_list.add(id_num);
                         counter++;
                     }
-                    if(counter==10){
+                    if(counter==5){
                         break;
                     }
                 }
@@ -195,23 +212,53 @@ public class AddMedicinePage extends AppCompatActivity {
         databaseReference.child("Medicine").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot: dataSnapshot.getChildren()){
-                    String med_name=snapshot.child("Name").getValue().toString();
-                    if(med_name.toLowerCase().contains(medName.toLowerCase())){
-                        submit.setEnabled(true);
-                    }
-                    else{
-                        submit.setEnabled(false);
+                int correctMed = 0;
+
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    String med_name = snapshot.child("Name").getValue().toString();
+                    if (med_name == medName) {
+                        Log.v("Test", "1");
+                        correctMed=2;
+                        break;
+
+
+
 
                     }
+                    else {
+                        Log.d("Test","2");
+                        correctMed=1;
+
+
+                    }
+
+                }
+                if (correctMed==1)
+                {
+                    searchMed.setError("Invalid Medicine Name");
                 }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });
+
+
+        if (radioGroup.getCheckedRadioButtonId() == -1) {
+            Toast toast = Toast.makeText(getApplicationContext(),
+                    "Please select one of the options for medicine intake period",
+                    Toast.LENGTH_SHORT);
+
+            toast.show();
+        }
+        else {
+        }
+
+
+
+
+
 
     }
 }
